@@ -1,6 +1,6 @@
 # checkers_online.py
 
-> Unofficial Python wrapper for [CheckersOnline](https://play.google.com/store/apps/details?id=com.rstgames.checkers) — automate and interact with the popular mobile checkers game via its TCP socket API.
+> Mobile-API for [CheckersOnline](https://play.google.com/store/apps/details?id=com.rstgames.checkers) automate and interact with the popular mobile checkers game via its TCP socket API.
 
 ---
 
