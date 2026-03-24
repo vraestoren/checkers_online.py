@@ -3,7 +3,7 @@
   checkers_online.py
 </h1>
 
-> Mobile-API for [CheckersOnline](https://play.google.com/store/apps/details?id=com.rstgames.checkers) automate and interact with the popular mobile checkers game via its TCP socket API.
+> Socket-API for [CheckersOnline](https://play.google.com/store/apps/details?id=com.rstgames.checkers) by RST Games
 
 ---
 
