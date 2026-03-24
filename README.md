@@ -1,4 +1,7 @@
-# checkers_online.py
+<h1>
+  <img src="https://play-lh.googleusercontent.com/xBMmaATox_2z_rb76UCJjh89iWITz6Ivqq4FyguM6bpi7429suZHIoB-exrAAJkyrQ=w480-h960-rw" width="28" style="vertical-align:middle;" />
+  checkers_online.py
+</h1>
 
 > Mobile-API for [CheckersOnline](https://play.google.com/store/apps/details?id=com.rstgames.checkers) automate and interact with the popular mobile checkers game via its TCP socket API.
 
