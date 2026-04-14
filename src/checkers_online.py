@@ -1,13 +1,11 @@
 import socket
-from json import dumps
-from json import loads
 from time import sleep
 from sys import stderr
 from hashlib import md5
 from loguru import logger
 from base64 import b64encode
 from datetime import datetime
-
+from json import dumps, loads
 
 class CheckersOnline:
 	def __init__(
@@ -28,14 +26,14 @@ class CheckersOnline:
 			format="{time:HH:mm:ss.SSS}:{message}",
 			level="DEBUG" if debug else "INFO",
 		)
-		self.sign(self.get_session_key())
+		self._sign(self.get_session_key())
 
 	def create_connection(self) -> None:
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.socket.connect(("65.21.247.72", 12771))
-		self.logger.info(f"Connected to the server!")
+		self.logger.info("Connected to the server!")
 
-	def send_server(self, data: dir) -> None:
+	def send_server(self, data: dict) -> None:
 		sleep(0.1)
 		self.socket.send(
 			(data.pop("command") + dumps(
@@ -58,7 +56,7 @@ class CheckersOnline:
 			command = i[:position]
 			try:
 				message = loads(i[position:])
-			except:
+			except BaseException:
 				continue
 			message["command"] = command
 			result.append(message)
@@ -81,23 +79,20 @@ class CheckersOnline:
 		data = self.receive_server_response()
 		return self.unmarshal(data)[0]["key"]
 
-	def sign(self, session_key: int) -> None:
-		hash = b64encode(md5(
-			(
-				f"{session_key}falgcanfxehkufvcukydbvkudvgkuydsdasfdfvwvcyksed").encode()
-			).digest()
-		).decode()
-		self.send_server({"hash": hash, "command": "sign"})
-		self.logger.info(f"[{self.tag}] Session is verified!")
+	def _sign(self, session_key: int) -> None:
+		token_hash = b64encode(md5(
+			f"{session_key}falgcanfxehkufvcukydbvkudvgkuydsdasfdfvwvcyksed".encode()
+		).digest()).decode()
+		self.send_server({"hash": token_hash, "command": "sign"})
 
 	def login_with_access_token(self, access_token: str) -> dict:
 		self.access_token = access_token
-		self.send_server(
-			{"token": self.access_token, "command": "auth"}
-		)
-		self.user_id = self.get_authorized()[0]["id"]
-		self.logger.info(f"[{self.tag}] Authorized with::: {self.access_token} successful!")
-		return self.receive_server_response(True)
+		self.send_server({"token": self.access_token, "command": "auth"})
+		response = self.get_authorized()
+		self.user_id = response[0]["id"]
+		self.logger.info(
+			f"[{self.tag}] Authorized with {self.access_token} successful!")
+		return response
 
 	def join_to_game(
 			self,
@@ -122,12 +117,12 @@ class CheckersOnline:
 
 	def create_game(
 			self,
-			type: int = 1,
+			game_type: int = 1,
 			bet: int = 100,
 			password: str = None,
 			fast: bool = True) -> None:
 		data = {
-			"type": type,
+			"type": game_type,
 			"bet": bet,
 			"fast": fast
 		}
@@ -137,19 +132,19 @@ class CheckersOnline:
 
 	def lookup_start(
 			self,
-			type: list = [1, 2],
+			game_type: list = None,
 			pr: bool = False,
-			cube: list = [False, True],
-			fast: list = [False, True],
+			cube: list = None,
+			fast: list = None,
 			bet_min: int = 100,
 			bet_max: int = 1000000,
 			full: bool = False) -> None:
 		data = {
 			"command": "lookup_start",
-			"type": type,
+			"type": game_type or [1, 2],
 			"pr": [pr],
-			"cube": cube,
-			"fast": fast,
+			"cube": cube or [False, True],
+			"fast": fast or [False, True],
 			"betMin": bet_min,
 			"betMax": bet_max,
 			"full": [full],
@@ -170,7 +165,8 @@ class CheckersOnline:
 		return self.receive_server_response(True)
 
 	def buy_premium(self, id: int = 0) -> None:
-		self.send_server({"command": "buy_prem", "id": f"com.rstgames.che.prem.{id}"})
+		self.send_server({"command": "buy_prem",
+						  "id": f"com.rstgames.che.prem.{id}"})
 
 	def buy_points(self, id: int = 0) -> None:
 		self.send_server(
@@ -248,7 +244,7 @@ class CheckersOnline:
 			{"command": "send_user_msg", "to": user_id, "msg": message}
 		)
 
-	def delete_messege(self, message_id: int) -> None:
+	def delete_message(self, message_id: int) -> None:
 		self.send_server({"command": "delete_msg", "msg_id": message_id})
 
 	def accept_friend(self, user_id: int) -> None:
