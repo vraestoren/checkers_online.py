@@ -25,16 +25,16 @@ client.login_with_access_token(access_token="your_token_here")
 
 ## Features
 
-- 🔌 **Connection** — automatic TCP socket connection and session verification on init
-- 🔐 **Auth** — login with access token
-- 🎮 **Games** — create, join, leave, and search games
-- 🏳️ **In-game actions** — ready up, surrender, draw requests, send emotes
-- 👥 **Friends** — send/accept/decline/delete friend requests
-- 💬 **Messaging** — send and delete private messages, invite to game
-- 👤 **Users** — search users, view profiles, save notes
-- 🏆 **Assets & Achievements** — select skins, achievements
-- 💎 **Shop** — view prices, buy premium and points
-- 📋 **Lobby** — browse available games with filters
+-  **Connection** — automatic TCP socket connection and session verification on init
+-  **Auth** — login with access token
+-  **Games** — create, join, leave, and search games
+-  **In-game actions** — ready up, surrender, draw requests, send emotes
+-  **Friends** — send/accept/decline/delete friend requests
+-  **Messaging** — send and delete private messages, invite to game
+-  **Users** — search users, view profiles, save notes
+-  **Assets & Achievements** — select skins, achievements
+-  **Shop** — view prices, buy premium and points
+-  **Lobby** — browse available games with filters
 
 ---
 
